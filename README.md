@@ -1,9 +1,9 @@
 **FIREFLY TERMINAL**
 
-Firefly terminal is terminal emulator I made to refresh my pthon skills for the Summer Of Making event by hackclub.
+Firefly terminal is terminal emulator I made to refresh my python skills for the Summer Of Making event by hackclub.
 
 
-![image](terminal.png)
+![image](termi.png)
 
 
 **Current Supported Commands:**
