@@ -1,10 +1,10 @@
-  @page { size: 21cm 29.7cm; margin: 2cm } p { line-height: 115%; margin-bottom: 0.25cm; background: transparent }
-
 **FIREFLY TERMINAL**
 
 Firefly terminal is terminal emulator I made to refresh my pthon skills for the Summer Of Making event by hackclub.
 
-  
+
+![image](~/Firefly_Terminal/terminal.png)
+
 
 **Current Supported Commands:**
 
