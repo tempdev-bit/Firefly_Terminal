@@ -3,7 +3,7 @@
 Firefly terminal is terminal emulator I made to refresh my pthon skills for the Summer Of Making event by hackclub.
 
 
-![image](~/terminal.png)
+![image](terminal.png)
 
 
 **Current Supported Commands:**
