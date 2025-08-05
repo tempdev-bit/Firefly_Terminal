@@ -1,12 +1,18 @@
 # 🔥 Firefly Terminal
 
-A fun, lightweight, command-line terminal built with Python — packed with utility functions, simple games, ASCII art, and a nostalgic hacker vibe. It brings together essential file operations, system commands, and a sprinkle of humor.
+A fun, lightweight, command-line terminal built with Python — packed with utility functions, simple games, ASCII art, and a retro vibe. It brings together essential file operations, system commands, and a sprinkle of humor.
+Built for the Summer-of-Making competition
 
 ![ASCII Logo](termi.png)
 
 ---
 
 ## 🚀 Features
+
+### Basic
+- `clear` — Clear screen.
+- `exit` — Exit the terminal.
+- `about` — Info about the terminal.
 
 ### 🧰 Core Utilities
 - `echo [text]` — Echo input text back.
@@ -41,13 +47,8 @@ A fun, lightweight, command-line terminal built with Python — packed with util
 - `games` — List all available games.
 
 ### 🎨 Easter eggs
-- `luffy` — Prints Luffy ASCII art.
-- `strawhats` — Prints the Straw Hat Pirates' jolly roger.
-- `about` — Info about the terminal.
-
-### Basic
-- `clear` — Clear screen.
-- `exit` — Exit the terminal.
+- `luffy` — Luffy ASCII art!
+- `strawhats` — STRAWHATS!
 
 ---
 
