@@ -5,16 +5,22 @@ import random
 import subprocess
 import platform
 import shlex
+from colorama import Fore, Style, init
 
-ASCII_ART =f"""                           
+# Initialize colorama with autoreset so we don't need to reset manually each time
+init(autoreset=True)
+
+# Main ASCII art in blue
+ASCII_ART = f"""{Fore.BLUE}                           
  _____ _         ___ _     
 |   __|_|___ ___|  _| |_ _ 
 |   __| |  _| -_|  _| | | |
 |__|  |_|_| |___|_| |_|_  |
                       |___|
-"""
+{Style.RESET_ALL}"""
 
-LUFFY_ART =f"""
+# Yellow ASCII art for fun
+LUFFY_ART = f"""{Fore.YELLOW}
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⣿⣿⠀⠀⠀⢠⣾⣧⣤⡖⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⢀⣼⠋⠀⠉⠀⢄⣸⣿⣿⣿⣿⣿⣥⡤⢶⣿⣦⣀⡀
@@ -28,9 +34,9 @@ LUFFY_ART =f"""
 ⠈⠙⢿⣿⡟⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣄⠛⠉⢩⣷⣴⡆⠀⠀⠀⠀⠀
 ⠀⠀⠀⠋⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣀⡠⠋⠈⢿⣇⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
-"""
+{Style.RESET_ALL}"""
 
-STRAWHAT_ART = f"""
+STRAWHAT_ART = f"""{Fore.YELLOW}
 ⠀⠀⡶⠛⠲⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡶⠚⢲⡀⠀
 ⣰⠛⠃⠀⢠⣏⠀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣤⣤⣤⣀⡀⠀⠀⠀⣸⡇⠀⠈⠙⣧
 ⠸⣦⣤⣄⠀⠙⢷⣤⣶⠟⠛⢉⣁⣠⣤⣤⣤⣀⣉⠙⠻⢷⣤⡾⠋⢀⣠⣤⣴⠟
@@ -47,168 +53,139 @@ STRAWHAT_ART = f"""
 ⢰⠟⠛⠟⠁⣨⡿⢷⣤⣈⠙⢿⡙⠒⠓⠒⠓⠚⣹⠛⢉⣠⣾⠿⣧⡀⠙⠋⠙⣆
 ⠹⣄⡀⠀⠐⡏⠀⠀⠉⠛⠿⣶⣿⣦⣤⣤⣤⣶⣷⡾⠟⠋⠀⠀⢸⡇⠀⢠⣤⠟
 ⠀⠀⠳⢤⠼⠃⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠘⠷⢤⠾⠁⠀
-"""
+{Style.RESET_ALL}"""
 
 class fireflyTerminal(cmd.Cmd):
-    intro = ASCII_ART + f"Type 'help' to see all commands!"
-    
+    intro = ASCII_ART + f"{Fore.GREEN}Type 'help' to see all commands!{Style.RESET_ALL}"
+    prompt = f"{Fore.BLUE}firefly> {Style.RESET_ALL}"
 
-    def do_echo(self,arg):
-        "Echo the input text: echo [text]"
-        print(f"{arg}")
+    def do_echo(self, arg):
+        print(f"{Fore.GREEN}{arg}{Style.RESET_ALL}")
 
+    def do_time(self, arg):
+        now = datetime.datetime.now()
+        print(f"{Fore.GREEN}{now}{Style.RESET_ALL}")
 
-    def do_time(self,arg):
-        "Display current time: time"
-        #fix ts stupid bug becuse ts pmo so bad
-        now = time = datetime.datetime.now()
-        print(time)
+    def do_about(self, arg):
+        print(f"{Fore.GREEN}Welcome to Firefly! This is a small demo!{Style.RESET_ALL}")
 
-
-    def do_about(self,arg):
-        "Display info about the terminal"
-        print(f"Welcome to Firefly! This is a small demo!")
-
-
-    def do_clear(self,arg):
-        "Clears the terminal"
+    def do_clear(self, arg):
         os.system('cls' if os.name == 'nt' else 'clear')
         print(ASCII_ART)
 
-
-    def do_py(self,arg):
-        "Execute python code!"
+    def do_py(self, arg):
         try:
-            result=eval(arg)
+            result = eval(arg)
             if result is not None:
-                print(f"Result: {result}")
+                print(f"{Fore.GREEN}Result: {result}{Style.RESET_ALL}")
         except Exception:
             try:
                 exec(arg)
             except Exception as e:
-                print(f"Errror: {e}")
-    
+                print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_calc(self, arg):
-        "Calculator!: calc [mathematical expression; + - * /]"
         if not arg:
-            print(f"Usage: calc [mathematical expression; + - * /]")
+            print(f"{Fore.RED}Usage: calc [expression]{Style.RESET_ALL}")
             return
         try:
             result = eval(arg, {"__builtins__": {}})
-            print(f"Result: {result}")
+            print(f"{Fore.GREEN}Result: {result}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
-
-    def do_cd(self,path):
-        "Change directory!"
+    def do_cd(self, path):
         if not path:
-            print(f"How to use: cd [path name]! ")
+            print(f"{Fore.RED}Usage: cd [path]{Style.RESET_ALL}")
             return
         try:
             os.chdir(os.path.expanduser(path))
-            print(f"Changed directory to {os.getcwd()}")
+            print(f"{Fore.GREEN}Changed directory to {os.getcwd()}{Style.RESET_ALL}")
         except Exception as e:
-            print("Errror: {e}")
-    
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
-    def do_ls(self,arg):
-        "List all files in current directory!"
+    def do_ls(self, arg):
         try:
             entries = os.listdir(os.getcwd())
             for entry in entries:
                 full_path = os.path.join(os.getcwd(), entry)
                 if os.path.isdir(full_path):
-                    print(f"{entry}/")
+                    print(f"{Fore.BLUE}{entry}/{Style.RESET_ALL}")
                 else:
-                    print(f"{entry}")
+                    print(f"{Fore.GREEN}{entry}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-    
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_pwd(self, arg):
-        "Show current directory"
-        print(f"{os.getcwd()}")
-
+        print(f"{Fore.GREEN}{os.getcwd()}{Style.RESET_ALL}")
 
     def do_ping(self, arg):
-        "Ping a website!"
         if not arg:
-            print("Usage: ping <hostname or IP>")
+            print(f"{Fore.RED}Usage: ping <hostname or IP>{Style.RESET_ALL}")
             return
         args = shlex.split(arg)
-        command = ['ping', '-c', '8'] + args  # Send 8 packets by default
+        command = ['ping', '-c', '8'] + args
         try:
             with subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, bufsize=1, text=True) as proc:
                 for line in proc.stdout:
-                    print(line, end='')  # `end=''` to avoid double newlines
+                    print(f"{Fore.GREEN}{line}{Style.RESET_ALL}", end='')
         except FileNotFoundError:
-            print("Error: 'ping' command not found. Is it installed?")
+            print(f"{Fore.RED}Error: 'ping' command not found.{Style.RESET_ALL}")
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f"{Fore.RED}An error occurred: {e}{Style.RESET_ALL}")
 
-
-    def do_exit(self,arg):
-        "Exits the terminal!"
-        print("Exiting firefly..")
+    def do_exit(self, arg):
+        print(f"{Fore.YELLOW}Exiting Firefly...{Style.RESET_ALL}")
         return True
 
-
-    def do_fly(self,arg):
-        "Creates a new file!"
+    def do_fly(self, arg):
         if not arg:
-            print(f"Usage: fly [filename]")
+            print(f"{Fore.RED}Usage: fly [filename]{Style.RESET_ALL}")
             return
         try:
             with open(arg, 'x') as f:
                 pass
-            print(f"File created: {arg}")
+            print(f"{Fore.GREEN}File created: {arg}{Style.RESET_ALL}")
         except FileExistsError:
-            print(f"File already exists!: {arg}")
+            print(f"{Fore.RED}File already exists: {arg}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-    
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
-    def do_cat(self,arg):
-        "View contents of a text file!"
+    def do_cat(self, arg):
         if not arg:
-            print(f"Usage: cat [filename]")
+            print(f"{Fore.RED}Usage: cat [filename]{Style.RESET_ALL}")
+            return
         try:
             with open(arg, 'r') as f:
-                print(f"{f.read()}")
+                print(f"{Fore.GREEN}{f.read()}{Style.RESET_ALL}")
         except FileNotFoundError:
-            print(f"No file found!")
+            print(f"{Fore.RED}No file found!{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_append(self, arg):
-        "Append text to a file: append [filename]"
         if not arg:
-            print(f"Usage: append [filename]")
+            print(f"{Fore.RED}Usage: append [filename]{Style.RESET_ALL}")
             return
         try:
             with open(arg, 'a') as f:
-                print(f"Enter text to append! Type :wq on a new line to save.")
+                print(f"{Fore.BLUE}Enter text to append. Type :wq to save.{Style.RESET_ALL}")
                 while True:
                     line = input()
                     if line.strip() == ':wq':
                         break
                     f.write(line + '\n')
-            print(f"Appended to file: {arg}")
+            print(f"{Fore.GREEN}Appended to file: {arg}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_overwrite(self, arg):
-        "Edit a text file line-by-line: edit [filename]"
         if not arg:
-            print(f"Usage: edit [filename]")
+            print(f"{Fore.RED}Usage: overwrite [filename]{Style.RESET_ALL}")
             return
         try:
             content = []
-            print(f"Enter your text. Type ':wq' on a new line to save and quit.")
+            print(f"{Fore.BLUE}Enter your text. Type ':wq' to save.{Style.RESET_ALL}")
             while True:
                 line = input()
                 if line.strip() == ':wq':
@@ -216,209 +193,144 @@ class fireflyTerminal(cmd.Cmd):
                 content.append(line)
             with open(arg, 'w') as f:
                 f.write('\n'.join(content) + '\n')
-            print(f"File saved: {arg}")
+            print(f"{Fore.GREEN}File saved: {arg}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
-    
     def do_open(self, arg):
-        "Open a file using the system's default app: open [filename]"
         if not arg:
-            print(f"Usage: open [filename]")
+            print(f"{Fore.RED}Usage: open [filename]{Style.RESET_ALL}")
             return
         try:
             system = platform.system()
             if system == "Windows":
                 os.startfile(arg)
-            elif system == "Darwin":  # macOS
+            elif system == "Darwin":
                 subprocess.run(["open", arg], check=True)
             elif system == "Linux":
                 subprocess.run(["xdg-open", arg], check=True)
             else:
-                print(f"Unsupported OS: {system}")
+                print(f"{Fore.RED}Unsupported OS: {system}{Style.RESET_ALL}")
                 return
-            print(f"Opened: {arg}")
+            print(f"{Fore.GREEN}Opened: {arg}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_rm(self, arg):
-        "Deletes a file!"
         if not arg:
-            print(f"Usage: rm [filename]")
+            print(f"{Fore.RED}Usage: rm [filename]{Style.RESET_ALL}")
             return
         try:
             os.remove(arg)
-            print(f"Deleted file: {arg}")
+            print(f"{Fore.GREEN}Deleted file: {arg}{Style.RESET_ALL}")
         except FileNotFoundError:
-            print(f"File not found: {arg}")
+            print(f"{Fore.RED}File not found: {arg}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_find(self, arg):
-        "Search for a file in CURRENT directory tree: find [filename]"
         if not arg:
-            print(f"Usage: find [filename]")
+            print(f"{Fore.RED}Usage: find [filename]{Style.RESET_ALL}")
             return
         for root, dirs, files in os.walk('.'):
             if arg in files:
                 full_path = os.path.join(root, arg)
-                print(f"Found: {full_path}")
+                print(f"{Fore.GREEN}Found: {full_path}{Style.RESET_ALL}")
                 return
-        print(f"File is not found / File doesn't exist")
-
+        print(f"{Fore.RED}File not found.{Style.RESET_ALL}")
 
     def do_rename(self, arg):
-        "Renames the file: rename [old] [new]"
-        print(f"Rename a file: rename [old][new]")
         parts = arg.split()
         if len(parts) != 2:
-            print(f"Usage: rename [old] [new]")
+            print(f"{Fore.RED}Usage: rename [old] [new]{Style.RESET_ALL}")
+            return
         old, new = parts
         try:
-            os.rename(old,new)
-            print(f"Renamed: {old} -> {new}")
+            os.rename(old, new)
+            print(f"{Fore.GREEN}Renamed: {old} -> {new}{Style.RESET_ALL}")
         except FileNotFoundError:
-            print(f"File not found: {old}")
+            print(f"{Fore.RED}File not found: {old}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_mkdir(self, arg):
-        "Create a new directory!: mkdir [name]"
         if not arg:
-            print(f"Usage: mkdir [name]")
+            print(f"{Fore.RED}Usage: mkdir [name]{Style.RESET_ALL}")
             return
         try:
             os.makedirs(arg)
-            print(f"Directory created!: {arg}")
+            print(f"{Fore.GREEN}Directory created: {arg}{Style.RESET_ALL}")
         except FileExistsError:
-            print(f"Directory already exists!: {arg}")
+            print(f"{Fore.RED}Directory already exists: {arg}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_rmdir(self, arg):
-        "Deletes directory!: rmdir [name]"
         if not arg:
-            print(f"Usage: rmdir [name]")
+            print(f"{Fore.RED}Usage: rmdir [name]{Style.RESET_ALL}")
             return
         try:
             os.rmdir(arg)
-            print(f"Directory destroyed!: {arg}")
+            print(f"{Fore.GREEN}Directory removed: {arg}{Style.RESET_ALL}")
         except FileNotFoundError:
-            print(f"Directory doesn't exists!: {arg}")
+            print(f"{Fore.RED}Directory not found: {arg}{Style.RESET_ALL}")
         except OSError:
-            print(f"Directory not empty!")
+            print(f"{Fore.RED}Directory not empty!{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_stat(self, arg):
-        "Show details about a file or directory: stat [name]"
         if not arg:
-            print(f"Usage: stat [filename or directory]")
+            print(f"{Fore.RED}Usage: stat [filename]{Style.RESET_ALL}")
             return
         try:
             info = os.stat(arg)
-            print(f"Stats for: {arg}")
-            print(f"Size      : {info.st_size} bytes")
-            print(f"Modified  : {time.ctime(info.st_mtime)}")
-            print(f"Created   : {time.ctime(info.st_ctime)}")
-            print(f"Is Dir    : {os.path.isdir(arg)}")
-            print(f"Is File   : {os.path.isfile(arg)}")
+            print(f"{Fore.BLUE}Stats for: {arg}{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Size: {info.st_size} bytes{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Modified: {datetime.datetime.fromtimestamp(info.st_mtime)}{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Created: {datetime.datetime.fromtimestamp(info.st_ctime)}{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Is Dir: {os.path.isdir(arg)}{Style.RESET_ALL}")
+            print(f"{Fore.GREEN}Is File: {os.path.isfile(arg)}{Style.RESET_ALL}")
         except Exception as e:
-            print(f"Error: {e}")
-
+            print(f"{Fore.RED}Error: {e}{Style.RESET_ALL}")
 
     def do_flip(self, arg):
-        "Flips a coin!"
-        result = random.choice(['Heads' , 'Tails'])
-        print(f"You flipped: {result}")
-
+        result = random.choice(['Heads', 'Tails'])
+        print(f"{Fore.GREEN}You flipped: {result}{Style.RESET_ALL}")
 
     def do_roll(self, arg):
-        "Rolls a dice: roll [sides] ; minimum=2 default=6 maximum=20"
         try:
             sides = int(arg) if arg else 6
             if not 1 < sides <= 20:
-                print(f"Please choose a number from 2 to 20")
+                print(f"{Fore.RED}Please choose a number from 2 to 20{Style.RESET_ALL}")
+                return
             result = random.randint(1, sides)
-            print(f"You rolled a {sides}-sided dice: {result}")
+            print(f"{Fore.GREEN}You rolled a {sides}-sided dice: {result}{Style.RESET_ALL}")
         except ValueError:
-            print(f"Usage: roll [sides]")
-    
+            print(f"{Fore.RED}Usage: roll [sides]{Style.RESET_ALL}")
 
     def do_rps(self, arg):
-        "Play Rock-Paper-Scissors!"
-        options = ['rock' , 'paper' , 'scissors']
-        user = input(f"Choose rock, paper, or scissors:").strip().lower()
+        options = ['rock', 'paper', 'scissors']
+        user = input(f"{Fore.BLUE}Choose rock, paper, or scissors: {Style.RESET_ALL}").strip().lower()
         if user not in options:
-            print(f"Invalid choice! Choose rock, paper or scissor")
+            print(f"{Fore.RED}Invalid choice!{Style.RESET_ALL}")
             return
         comp = random.choice(options)
-        print(f"Computer chose: {comp}")
+        print(f"{Fore.GREEN}Computer chose: {comp}{Style.RESET_ALL}")
         if user == comp:
-            print(f"IT'S A TIE!")
+            print(f"{Fore.YELLOW}It's a tie!{Style.RESET_ALL}")
         elif (user == 'rock' and comp == 'scissors') or \
-        (user == 'paper' and comp == 'rock') or \
-        (user == 'scissors' and comp == 'paper'):
-            print(f"You win!")
+             (user == 'paper' and comp == 'rock') or \
+             (user == 'scissors' and comp == 'paper'):
+            print(f"{Fore.GREEN}You win!{Style.RESET_ALL}")
         else:
-            print(f"You lose!")
+            print(f"{Fore.RED}You lose!{Style.RESET_ALL}")
 
+    def do_luffy(self, arg):
+        print(LUFFY_ART)
 
-    def do_race(self,arg):
-        "Play a race!"
-        print(f"Welcome to the Number Race!")
-        print(f"First to exactly reach a random number between 40 and 60 wins!")
-        score = 0
-        turn = 'user'
-        randomNumber = random.randint(40, 60)
-        while score < randomNumber:
-            print(f"Current score: {score}")
-            if turn == 'user':
-                try:
-                    user_choice = int(input(f"Your turn! Add any number from 1 to 10!"))
-                    if user_choice not in [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]:
-                        print(f"Invalid! Add any number from 1 to 10")
-                        continue
-                except ValueError:
-                    print(f"Please enter a number!")
-                    continue
-                score += user_choice
-                turn = 'computer'
-            else:
-                comp_choice = random.choice([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
-                print(f"Computer adds: {comp_choice}")
-                score += comp_choice
-                turn = 'user'
-            
-            if score > randomNumber:
-                print(f"Oops! You went over the number.")
-                print(f"Game over. No winner.")
-            return
-        winner = "You" if turn == 'computer' else "Computer"
-        print(f"Final score: {randomNumber}")
-        print(f"{winner} wins!")
-
-    def do_games(self, arg):
-        "List all available games: games"
-        print(f"Available Games:")
-        print(f"- flip       : Flip a coin")
-        print(f"- roll [n]   : Roll a dice (default 6, max 20)")
-        print(f"- rps        : Rock-Paper-Scissors")
-        print(f"- race       : Race to a number game (number game)")
-
-
-    def do_luffy(self,arg):
-        "Luffy!"
-        print(f"{LUFFY_ART}")
-
-
-    def do_strawhats(self,arg):
-        "THE JOLLY ROGER!"
-        print(f"{STRAWHAT_ART}")
-
+    def do_strawhats(self, arg):
+        print(STRAWHAT_ART)
 
 
 if __name__ == '__main__':

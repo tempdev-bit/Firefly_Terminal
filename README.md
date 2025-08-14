@@ -1,9 +1,10 @@
-# 🔥 Firefly Terminal
+# 🔥 Firefly Terminal v2
 
 A fun, lightweight, command-line terminal built with Python — packed with utility functions, simple games, ASCII art, and a retro vibe. It brings together essential file operations, system commands, and a sprinkle of humor.
-Built for the Summer-of-Making competition
 
-![ASCII Logo](termi.png)
+VERSION 2: ADDED COLOUR SUPPORT!!
+
+![ASCII Logo](image.png)
 
 ---
 
@@ -63,11 +64,13 @@ Built for the Summer-of-Making competition
 Type 'help' to see all commands!
 
 ```
+![Code](termi.png)
 
 ## 🧑‍💻 Installation
 Prerequisites:
 
     Python 3.6+
+    Colorama
 
 Run the terminal:
 
