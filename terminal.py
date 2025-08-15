@@ -6,7 +6,11 @@ import subprocess
 import platform
 import shlex
 import psutil
-from colorama import Fore, Style, init
+import socket
+import time
+import distro 
+from colorama import init, Fore, Style
+
 
 # Initialize colorama with autoreset so we don't need to reset manually each time
 init(autoreset=True)
@@ -38,7 +42,7 @@ LUFFY_ART = f"""{Fore.YELLOW}
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠿⠿⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀
 {Style.RESET_ALL}"""
 
-STRAWHAT_ART = f"""{fore.BLUE}
+STRAWHAT_ART = f"""{Fore.BLUE}
 ⠀⠀⡶⠛⠲⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡶⠚⢲⡀⠀
 ⣰⠛⠃⠀⢠⣏⠀⠀⠀⠀⣀⣠⣤⣤⣤⣤⣤⣤⣤⣀⡀⠀⠀⠀⣸⡇⠀⠈⠙⣧
 ⠸⣦⣤⣄⠀⠙⢷⣤⣶⠟⠛⢉⣁⣠⣤⣤⣤⣀⣉⠙⠻⢷⣤⡾⠋⢀⣠⣤⣴⠟
@@ -89,17 +93,70 @@ class fireflyTerminal(cmd.Cmd):
         print(f"{Fore.GREEN}Free Disk Space: {disk.free / (1024 ** 3):.2f} GB{Style.RESET_ALL}")
 
 
-    #shows OS, machine, processor using 'platform' (will be remade into a neofetch clone)
     def do_sysinfo(self, arg):
-        sys_info = f"""
-        {Fore.GREEN}System Info:
-        OS: {platform.system()} {platform.release()}
-        Machine: {platform.machine()}
-        Processor: {platform.processor()}
-        Python Version: {platform.python_version()}
-        {Style.RESET_ALL}
+        # Fetch system information
+        uname = platform.uname()
+        os_name = distro.name()
+        os_version = platform.release()
+        machine = uname.machine
+        processor = uname.processor
+        python_version = platform.python_version()
+
+        # Get more details for a neofetch-style output
+        hostname = socket.gethostname()
+        uptime_seconds = time.time() - psutil.boot_time()
+        uptime = time.strftime("%H:%M:%S", time.gmtime(uptime_seconds))
+        cpu_cores = psutil.cpu_count(logical=False)
+
+        # RAM Calculation - Use the psutil.virtual_memory().total and ensure it's formatted correctly
+        total_memory = psutil.virtual_memory().total
+        ram_in_gb = int(total_memory / (1024 ** 3))  # Conversion to GB
+
+        # Assemble the neofetch-like output
+        sys_info = f""" {Fore.GREEN}
+            ╔═══════════════════════════╗
+            ║  _____                    ║
+            ║ |  ___| (_)  _ __    ___  ║
+            ║ | |_    | | | '__|  / _ \ ║
+            ║ |  _|   | | | |    |  __/ ║
+            ║ |_|     |_| |_|     \___| ║
+            ║                           ║
+            ║  _____   _                ║
+            ║ |  ___| | |  _   _        ║
+            ║ | |_    | | | | | |       ║
+            ║ |  _|   | | | |_| |       ║
+            ║ |_|     |_|  \__, |       ║
+            ║              |___/        ║
+            ╚═══════════════════════════╝
         """
-        print(sys_info)
+
+        # System Information to the right of the ASCII block
+        sys_info_output = f"""{Fore.LIGHTCYAN_EX}System Information:{Style.RESET_ALL}
+            {Fore.LIGHTBLACK_EX}Hostname:    {Fore.WHITE} {hostname}
+            {Fore.LIGHTBLACK_EX}OS:          {Fore.WHITE} {os_name} {os_version}
+            {Fore.LIGHTBLACK_EX}Machine:     {Fore.WHITE} {machine}
+            {Fore.LIGHTBLACK_EX}Processor:   {Fore.WHITE} {processor}
+            {Fore.LIGHTBLACK_EX}CPU Cores:   {Fore.WHITE} {cpu_cores}
+            {Fore.LIGHTBLACK_EX}RAM:         {Fore.WHITE} {ram_in_gb} GB
+            {Fore.LIGHTBLACK_EX}Uptime:      {Fore.WHITE} {uptime}
+            {Fore.LIGHTBLACK_EX}Python:      {Fore.WHITE} {python_version}
+
+            {Style.RESET_ALL}"""
+
+        # Split the lines of both sections
+        sys_info_lines = sys_info.splitlines()
+        sys_info_output_lines = sys_info_output.splitlines()
+
+        # Maximum number of lines to iterate over
+        max_lines = max(len(sys_info_lines), len(sys_info_output_lines))
+
+        # Loop to print side-by-side with better alignment and padding
+        for i in range(max_lines):
+            left_line = sys_info_lines[i] if i < len(sys_info_lines) else ""
+            right_line = sys_info_output_lines[i] if i < len(sys_info_output_lines) else ""
+
+            # Print both lines side by side with extra padding between the two sections
+            print(f"{left_line:<50} {right_line}")
 
 
     #shows time, will change later to support timezones
